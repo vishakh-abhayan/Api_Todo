@@ -1,8 +1,42 @@
+import { useState, ChangeEvent, FormEvent } from "react";
 import { BsArrowLeft, BsPersonFillAdd } from "react-icons/bs";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import axios from "../axios";
 import "./Auth.css";
 
 function Singup() {
+  const navigate = useNavigate();
+  const [formData, setFormData] = useState({
+    username: "",
+    password: "",
+    confirmPassword: "",
+  });
+  const [formError, setFormError] = useState("");
+
+  const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.value,
+    });
+  };
+
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    if (formData.password !== formData.confirmPassword) {
+      setFormError("Passwords do not match");
+      return;
+    }
+    try {
+      await axios.post("/register/", {
+        username: formData.username,
+        password: formData.password,
+      });
+      navigate("/");
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
     <div className="main_div">
       <div className="log_board">
@@ -10,28 +44,32 @@ function Singup() {
           <BsPersonFillAdd size={50} />
           Signup
         </h1>
-        <form className="input_field">
+        <form className="input_field" onSubmit={handleSubmit}>
           <input
             placeholder="Username"
             type="text"
             name="username"
             autoComplete="newUser"
-          />
-          <input
-            placeholder="Email"
-            type="email"
-            name="email"
-            autoComplete="off"
+            value={formData.username}
+            onChange={handleInputChange}
           />
           <input
             placeholder="Password"
             type="password"
             name="password"
             autoComplete="new-password"
+            value={formData.password}
+            onChange={handleInputChange}
           />
-          {/* {formError && (
-        <p className="error-message">Please fill in all fields.</p>
-      )} */}
+          <input
+            placeholder="Confirm Password"
+            type="password"
+            name="confirmPassword"
+            autoComplete="new-password"
+            value={formData.confirmPassword}
+            onChange={handleInputChange}
+          />
+          {formError && <p className="error-message">{formError}</p>}
           <div className="log_buttons">
             <Link to="/" className="button_log">
               <BsArrowLeft /> back to login
