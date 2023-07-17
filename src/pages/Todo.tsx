@@ -3,7 +3,8 @@ import { useNavigate, useParams } from "react-router-dom";
 import { BsPersonCircle } from "react-icons/bs";
 import { IoTrashBin } from "react-icons/io5";
 import { FaPen } from "react-icons/fa";
-import { useEffect, useState, FormEvent } from "react";
+import { useState, FormEvent } from "react";
+import qs from "qs";
 import axios from "../axios";
 
 function Todo() {
@@ -16,21 +17,26 @@ function Todo() {
     try {
       const response = await axios.post(
         "/todo/",
-        {
+        qs.stringify({
           title: todoTitle,
-        },
+        }),
         {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+            "Content-Type": "application/x-www-form-urlencoded",
           },
         }
       );
-      // Handle successful response here (e.g., show a success message)
+
       console.log(response.data);
     } catch (error) {
-      // Handle error here (e.g., show an error message)
       console.error(error);
     }
+  };
+
+  const logout = () => {
+    localStorage.removeItem("accessToken");
+    navigate("/");
   };
 
   return (
@@ -63,7 +69,9 @@ function Todo() {
             <BsPersonCircle />
             {username}
           </p>
-          <p className="nav_act">logout</p>
+          <p className="nav_act" onClick={logout}>
+            Logout
+          </p>
         </div>
       </div>
     </div>
