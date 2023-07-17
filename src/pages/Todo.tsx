@@ -11,6 +11,7 @@ import axios from "../axios";
 interface Todo {
   id: number;
   title: string;
+  isComplete: boolean;
 }
 
 function Todo() {
@@ -61,6 +62,34 @@ function Todo() {
     }
   };
 
+  const handleTodoClick = async (id: number) => {
+    try {
+      const updatedTodos = todos.map((todo) => {
+        if (todo.id === id) {
+          return {
+            ...todo,
+            isComplete: !todo.isComplete,
+          };
+        }
+        return todo;
+      });
+
+      setTodos(updatedTodos);
+
+      await axios.put(
+        `/todo/${id}/`,
+        {},
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+          },
+        }
+      );
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   const logout = () => {
     localStorage.removeItem("accessToken");
     navigate("/");
@@ -88,7 +117,12 @@ function Todo() {
         <div className="card_contain">
           {todos.map((todo) => (
             <div className="todo_card" key={todo.id}>
-              <h1 className="todo_true">{todo.title}</h1>
+              <h1
+                onClick={() => handleTodoClick(todo.id)}
+                className={todo.isComplete ? "todo_true" : "todo_fales"}
+              >
+                {todo.title}
+              </h1>
               <IoTrashBin className="todo_bin" size={20} />
             </div>
           ))}
