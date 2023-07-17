@@ -90,6 +90,21 @@ function Todo() {
     }
   };
 
+  const handleTodoDelete = async (id: number) => {
+    try {
+      await axios.delete(`/todo/${id}/`, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+        },
+      });
+
+      const updatedTodos = todos.filter((todo) => todo.id !== id);
+      setTodos(updatedTodos);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   const logout = () => {
     localStorage.removeItem("accessToken");
     navigate("/");
@@ -123,7 +138,11 @@ function Todo() {
               >
                 {todo.title}
               </h1>
-              <IoTrashBin className="todo_bin" size={20} />
+              <IoTrashBin
+                className="todo_bin"
+                size={20}
+                onClick={() => handleTodoDelete(todo.id)}
+              />
             </div>
           ))}
         </div>
