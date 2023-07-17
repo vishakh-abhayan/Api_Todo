@@ -1,10 +1,8 @@
 # TodoApp
 
 This is a TodoApp project built with TypeScript and React, using a REST API backend.
-<div align="center">
-<img src='https://res.cloudinary.com/practicaldev/image/fetch/s--rhCf6dgo--/c_imagga_scale,f_auto,fl_progressive,h_500,q_auto,w_1000/https://dev-to-uploads.s3.amazonaws.com/uploads/articles/kemauetddjar4x5vtq0w.png'/>
-</div>
 
+![Vite + React + TS (1)](https://github.com/vishakh-abhayan/Api_Todo/assets/94307781/9e91744b-adce-4e54-b298-a872ce997591)
 
 
 ## Features
@@ -67,5 +65,8 @@ This is a TodoApp project built with TypeScript and React, using a REST API back
 Contributions are welcome! If you find any issues or have suggestions for improvements, please feel free to open an issue or submit a pull request.
 
 
-![Vite + React + TS (1)](https://github.com/vishakh-abhayan/Api_Todo/assets/94307781/9e91744b-adce-4e54-b298-a872ce997591)
 
+
+<div align="center">
+<img src='https://res.cloudinary.com/practicaldev/image/fetch/s--rhCf6dgo--/c_imagga_scale,f_auto,fl_progressive,h_500,q_auto,w_1000/https://dev-to-uploads.s3.amazonaws.com/uploads/articles/kemauetddjar4x5vtq0w.png'/>
+</div>
