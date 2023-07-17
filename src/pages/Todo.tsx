@@ -3,19 +3,44 @@ import { useNavigate, useParams } from "react-router-dom";
 import { BsPersonCircle } from "react-icons/bs";
 import { IoTrashBin } from "react-icons/io5";
 import { FaPen } from "react-icons/fa";
-import { useState, FormEvent } from "react";
+import { useState, FormEvent, useEffect } from "react";
+import { AxiosResponse } from "axios";
 import qs from "qs";
 import axios from "../axios";
+
+interface Todo {
+  id: number;
+  title: string;
+}
 
 function Todo() {
   const { username } = useParams();
   const navigate = useNavigate();
   const [todoTitle, setTodoTitle] = useState("");
+  const [todos, setTodos] = useState<Todo[]>([]);
+
+  useEffect(() => {
+    const fetchTodos = async () => {
+      try {
+        const response: AxiosResponse<any> = await axios.get("/todo/", {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+          },
+        });
+
+        setTodos(response.data);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
+    fetchTodos();
+  }, []);
 
   const handleTodoSubmit = async (e: FormEvent) => {
     e.preventDefault();
     try {
-      const response = await axios.post(
+      const response: AxiosResponse<any> = await axios.post(
         "/todo/",
         qs.stringify({
           title: todoTitle,
@@ -29,6 +54,8 @@ function Todo() {
       );
 
       console.log(response.data);
+      setTodos([...todos, response.data]);
+      setTodoTitle("");
     } catch (error) {
       console.error(error);
     }
@@ -59,10 +86,12 @@ function Todo() {
       </div>
       <div className="todo_section">
         <div className="card_contain">
-          <div className="todo_card">
-            <h1 className="todo_true">hklkj</h1>
-            <IoTrashBin className="todo_bin" size={20} />
-          </div>
+          {todos.map((todo) => (
+            <div className="todo_card" key={todo.id}>
+              <h1 className="todo_true">{todo.title}</h1>
+              <IoTrashBin className="todo_bin" size={20} />
+            </div>
+          ))}
         </div>
         <div className="todo_nav">
           <p className="nav_cop">
